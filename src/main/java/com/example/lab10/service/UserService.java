@@ -1,9 +1,9 @@
 package com.example.lab10.service;
 
+import com.example.lab10.dto.CreateUserRequest;
 import com.example.lab10.model.User;
 import com.example.lab10.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -14,7 +14,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public void createUser(CreateUserRequest request) {
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        userRepository.save(user);
     }
 }
