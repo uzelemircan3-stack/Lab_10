@@ -7,7 +7,6 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) return false;
-        // Kural: Boşluk içeremez ve 'admin' kelimesini barındıramaz [cite: 136]
         return !value.contains(" ") && !value.toLowerCase().contains("admin");
     }
 }
