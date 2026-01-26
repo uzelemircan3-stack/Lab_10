@@ -1,6 +1,6 @@
 package com.example.lab10.config;
 
-import com.example.lab10.security.JwtAuthenticationEntryPoint; // Import the new class
+import com.example.lab10.security.JwtAuthenticationEntryPoint;
 import com.example.lab10.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,6 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    // 2. Inject it via Constructor
     public SecurityConfig(JwtAuthFilter jwtAuthenticationFilter,
                           UserDetailsService userDetailsService,
                           JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
@@ -46,15 +45,13 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .headers(headers -> headers
                         .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-                        .contentSecurityPolicy(cps -> cps.policyDirectives("default-src 'self'")) // [cite: 36, 80]
-                        .frameOptions(frame -> frame.deny()) // [cite: 33, 79]
-                        .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff")) // [cite: 27, 78]
-                        .addHeaderWriter(new StaticHeadersWriter("Referrer-Policy", "no-referrer")) // [cite: 38]
+                        .contentSecurityPolicy(cps -> cps.policyDirectives("default-src 'self'"))
+                        .frameOptions(frame -> frame.deny())
+                        .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff"))
+                        .addHeaderWriter(new StaticHeadersWriter("Referrer-Policy", "no-referrer"))
                 )
-                // ---------------------------------------------
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/register", "/api/auth/login", "/api/auth/refresh", "/error").permitAll()
                         .anyRequest().authenticated()
@@ -67,7 +64,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

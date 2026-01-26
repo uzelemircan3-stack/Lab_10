@@ -2,14 +2,13 @@ package com.example.lab10.service;
 
 import com.example.lab10.dto.NoteDto;
 import com.example.lab10.entity.Note;
-import com.example.lab10.entity.User; // DİKKAT: entity.User
+import com.example.lab10.entity.User;
 import com.example.lab10.repository.NoteRepository;
 import com.example.lab10.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -18,7 +17,6 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
-
 
     public List<Note> getUserNotes(String username) {
         User user = userRepository.findByUsername(username)
@@ -38,12 +36,11 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
-
     public void deleteNote(Long noteId, String username) {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
 
-
+        // PDF Task 1.1: İş mantığı doğrulaması
         if (!note.getUser().getUsername().equals(username)) {
             throw new RuntimeException("You are not allowed to delete this note");
         }
@@ -51,9 +48,9 @@ public class NoteService {
         noteRepository.delete(note);
     }
 
-
     public List<Note> searchNotesNative(String query, String username) {
-
-        return Collections.emptyList();
+        // DÜZELTME: Repository metodu artık gerçekten çağrılıyor.
+        // Bu sayede "Wanted but not invoked" hatası çözülecek.
+        return noteRepository.searchNotesNative(query, username);
     }
 }
