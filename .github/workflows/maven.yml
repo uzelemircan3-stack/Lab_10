@@ -1,0 +1,46 @@
+name: Lab 14 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        # PDF Task 43: Kodu GitHub sunucusuna çeker
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        # Projenin çalışması için Java 17 ortamını kurar
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test
+        # PDF Task 44 & 45: Projeyi derler ve tüm testleri (Unit + Integration) çalıştırır
+        # PDF Task 50: Testler fail olursa build süreci burada durur ve hata verir
+        run: mvn clean test
+
+      - name: Generate Coverage Report
+        # PDF Task 46 & 47: JaCoCo ile test kapsamı raporu oluşturur
+        run: mvn jacoco:report
+
+      - name: OWASP Dependency Check
+        # PDF Task 54: Üçüncü taraf kütüphane güvenlik taraması yapar
+        # PDF Task 58: Yüksek riskli bir açık bulursa build'i durdurur
+        run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
+
+      - name: Upload JaCoCo Artifact
+        # Üretilen raporları GitHub panelinden indirilebilir hale getirir
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
