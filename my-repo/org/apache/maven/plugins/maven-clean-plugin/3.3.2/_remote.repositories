@@ -1,0 +1,6 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 26 16:02:23 CET 2026
+maven-clean-plugin-3.3.2.jar>aliyun-maven=
+maven-clean-plugin-3.3.2.jar>central=
+maven-clean-plugin-3.3.2.pom>aliyun-maven=
+maven-clean-plugin-3.3.2.pom>central=

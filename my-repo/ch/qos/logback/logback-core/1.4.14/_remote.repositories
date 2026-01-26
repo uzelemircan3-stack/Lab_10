@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Mon Jan 26 15:59:44 CET 2026
+logback-core-1.4.14.jar>aliyun-maven=
+logback-core-1.4.14.pom>aliyun-maven=
